@@ -34,7 +34,7 @@ CREATE TABLE `tmovimiento` (
   PRIMARY KEY (`id`),
   KEY `fk_cuentaModificada_idx` (`idCuentaModificada`),
   CONSTRAINT `fk_cuentaModificada` FOREIGN KEY (`idCuentaModificada`) REFERENCES `tcuenta` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,6 @@ CREATE TABLE `tmovimiento` (
 
 LOCK TABLES `tmovimiento` WRITE;
 /*!40000 ALTER TABLE `tmovimiento` DISABLE KEYS */;
-INSERT INTO `tmovimiento` VALUES (3,'DEPOSITO','2020-12-06','Deposito inicial',50000.00,6),(4,'DEPOSITO','2020-12-06','platita',45000.00,7);
 /*!40000 ALTER TABLE `tmovimiento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-06 21:58:29
+-- Dump completed on 2020-12-06 22:26:40

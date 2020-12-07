@@ -208,7 +208,7 @@ public class Controlador {
 
                 do {
                     listarCuentas();
-                    ui.imprimir("Numero de la cuenta corriente: ");
+                    ui.imprimir("Id o numero de la cuenta corriente: ");
                     String idCuentaCorriente = ui.leerLinea();
                     cuentaCorrienteEncontrada = gestorCuentas.buscarPorId(idCuentaCorriente);
                 } while (!cuentaCorrienteEncontrada.isPresent());

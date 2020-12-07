@@ -30,13 +30,28 @@ public class CuentaDAO {
     }
 
     public int save(Cuenta nuevaCuenta) {
-        String insert = "INSERT INTO tcuenta (numeroCuenta, tipoCuenta, fechaApertura, saldo, tasaIntereses, idDuenno) VALUES ";
+        String insert;
+
+        if(nuevaCuenta.getTipoCuenta().equals(EnumTipoCuenta.AHORRO_PROGRAMADO)) {
+            insert = "INSERT INTO tcuenta (numeroCuenta, tipoCuenta, fechaApertura, saldo, tasaIntereses, idDuenno, montoDebito, cuentaRelacionada) VALUES ";
+        } else {
+            insert = "INSERT INTO tcuenta (numeroCuenta, tipoCuenta, fechaApertura, saldo, tasaIntereses, idDuenno) VALUES ";
+        }
+
         insert += "('" + nuevaCuenta.getNumeroCuenta() + "','";
         insert += nuevaCuenta.getTipoCuenta().toString() + "','";
         insert += Date.valueOf(nuevaCuenta.getFechaApertura()) + "',";
         insert += nuevaCuenta.getSaldo() + ",";
         insert += nuevaCuenta.getTasaInteres() + ",";
-        insert += nuevaCuenta.getDuenno().getId() + ")";
+        insert += nuevaCuenta.getDuenno().getId();
+
+        if(nuevaCuenta.getTipoCuenta().equals(EnumTipoCuenta.AHORRO_PROGRAMADO)) {
+            CuentaAhorroProgramado cuenta = (CuentaAhorroProgramado) nuevaCuenta;
+            insert += "," + cuenta.getMontoDebito() + ",";
+            insert += cuenta.getCuentaCorriente().getId() + ")";
+        } else {
+            insert += ")";
+        }
 
         int key = -1;
         try {

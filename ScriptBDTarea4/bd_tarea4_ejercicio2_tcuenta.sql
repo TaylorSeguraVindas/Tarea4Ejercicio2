@@ -32,10 +32,14 @@ CREATE TABLE `tcuenta` (
   `saldo` decimal(10,2) NOT NULL,
   `tasaIntereses` decimal(4,4) NOT NULL,
   `idDuenno` int NOT NULL,
+  `montoDebito` decimal(10,2) DEFAULT NULL,
+  `cuentaRelacionada` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_duennoCuenta_idx` (`idDuenno`),
+  KEY `fk_cuentaRelacionada_idx` (`cuentaRelacionada`),
+  CONSTRAINT `fk_cuentaRelacionada` FOREIGN KEY (`cuentaRelacionada`) REFERENCES `tcuenta` (`id`),
   CONSTRAINT `fk_duennoCuenta` FOREIGN KEY (`idDuenno`) REFERENCES `tcliente` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +48,6 @@ CREATE TABLE `tcuenta` (
 
 LOCK TABLES `tcuenta` WRITE;
 /*!40000 ALTER TABLE `tcuenta` DISABLE KEYS */;
-INSERT INTO `tcuenta` VALUES (5,'1234567','CORRIENTE','2020-12-06',0.00,0.1400,2),(6,'1234568','CORRIENTE','2020-12-06',50000.00,0.1400,2),(7,'1234570','AHORRO','2020-12-06',45000.00,0.1400,3);
 /*!40000 ALTER TABLE `tcuenta` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-06 21:58:28
+-- Dump completed on 2020-12-06 22:26:40
