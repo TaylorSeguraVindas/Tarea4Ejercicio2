@@ -1,29 +1,58 @@
 package segura.taylor.bl.gestor;
 
+import segura.taylor.PropertiesHandler;
 import segura.taylor.bl.entidades.Cuenta;
-import segura.taylor.bl.persistencia.CuentaFAO;
+import segura.taylor.bl.persistencia.CuentaDAO;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * La clase Gestor se encarga de realizar la comunicación entre FAO y el Controlador
+ * La clase Gestor se encarga de realizar la comunicación entre DAO y el Controlador
  *
  * @author Taylor Segura Vindas
  * @version 1.0
  * @since 2020-11-22
  */
 public class GestorCuentas {
-    CuentaFAO cuentaFAO = new CuentaFAO();
+    //CuentaFAO cuentaFAO = new CuentaFAO();
+    CuentaDAO cuentaDAO;
+    PropertiesHandler propertiesHandler = new PropertiesHandler();
+    Connection connection;
 
+    public GestorCuentas() {
+        try {
+            propertiesHandler.loadProperties();
+            //ABRIR DB
+            String driver = propertiesHandler.getDriver();
+            try {
+                Class.forName(driver).newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("LOADED DRIVER ---> " + driver);
+            String url = propertiesHandler.getCnxStr();
+            this.connection = DriverManager.getConnection(url, propertiesHandler.getUser(), propertiesHandler.getPwd());
+            System.out.println("CONNECTED TO ---> "+ url);
+
+            cuentaDAO = new CuentaDAO(this.connection);
+        } catch (Exception e) {
+            System.out.println("CANT CONNECT TO DATABASE");
+            e.printStackTrace();
+        }
+    }
     /**
      * Metodo usado para guardar cuentas
      * @param nuevocuenta instancia de la clase Cuenta que se desea guardar
      * @return true si se hace correctamente, false si ocurre un error
      * @see Cuenta
      */
-    public boolean guardarcuenta(Cuenta nuevocuenta) {
-        return cuentaFAO.guardarNuevaCuenta(nuevocuenta);
+    public int guardarcuenta(Cuenta nuevocuenta) {
+        return cuentaDAO.save(nuevocuenta);
     }
 
     /**
@@ -33,7 +62,7 @@ public class GestorCuentas {
      * @see Cuenta
      */
     public boolean modificarCuenta(Cuenta pCuenta) {
-        return cuentaFAO.modificarCuenta(pCuenta);
+        return cuentaDAO.updateSaldo(pCuenta);
     }
 
     /**
@@ -42,7 +71,13 @@ public class GestorCuentas {
      * @see Cuenta
      */
     public List<Cuenta> listarCuentas() {
-        return cuentaFAO.listarTodas();
+        try {
+            return cuentaDAO.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
     }
 
     /**
@@ -52,6 +87,12 @@ public class GestorCuentas {
      * @see Cuenta
      */
     public Optional<Cuenta> buscarPorId(String id) {
-        return cuentaFAO.buscarPorId(id);
+        try {
+            return cuentaDAO.findById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
     }
 }

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public class Movimiento implements SerializableCSV {
     //Variables
-    private String id;
+    private int id;
     private EnumTipoMovimiento tipo;
     private LocalDate fecha;
     private String descripcion;
@@ -15,10 +15,10 @@ public class Movimiento implements SerializableCSV {
     private Cuenta cuentaModificada;
 
     //Propiedades
-    public String getId() {
+    public int getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -64,7 +64,7 @@ public class Movimiento implements SerializableCSV {
      * @param datos array de String con los datos necesarios para crear la instancia
      */
     public Movimiento(String[] datos){
-        this.id = datos[0];
+        this.id = Integer.parseInt(datos[0]);
         this.tipo = EnumTipoMovimiento.valueOf(datos[1]);
         this.fecha = LocalDate.parse(datos[2]);
         this.descripcion = datos[3];
@@ -73,7 +73,7 @@ public class Movimiento implements SerializableCSV {
 
     /**
      * Metodo constructor
-     * @param id String que define el id
+     * @param id int que define el id
      * @param tipo valor de EnumTipoMovimiento que define el tipo de movimiento
      * @param fecha LocalDate que define la fecha de realización
      * @param descripcion String que define la descripcion
@@ -82,8 +82,7 @@ public class Movimiento implements SerializableCSV {
      * @see EnumTipoMovimiento
      * @see Cuenta
      */
-    public Movimiento(String id, EnumTipoMovimiento tipo, LocalDate fecha, String descripcion, double monto, Cuenta cuentaModificada) {
-        this.id = id;
+    public Movimiento(EnumTipoMovimiento tipo, LocalDate fecha, String descripcion, double monto, Cuenta cuentaModificada) {
         this.tipo = tipo;
         this.fecha = fecha;
         this.descripcion = descripcion;

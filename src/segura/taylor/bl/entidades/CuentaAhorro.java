@@ -48,7 +48,8 @@ public class CuentaAhorro extends Cuenta{
     @Override
     public String toString() {
         return "CuentaAhorro{" +
-                "numeroCuenta=" + numeroCuenta +
+                "id=" + id +
+                ", numeroCuenta=" + numeroCuenta +
                 ", fechaApertura=" + fechaApertura +
                 ", saldo=" + saldo +
                 ", tasaInteres=" + tasaInteres +

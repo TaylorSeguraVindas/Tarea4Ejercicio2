@@ -69,7 +69,8 @@ public class CuentaAhorroProgramado extends Cuenta{
     @Override
     public String toString() {
         return "CuentaAhorroProgramado{" +
-                "numeroCuenta=" + numeroCuenta +
+                "id=" + id +
+                ", numeroCuenta=" + numeroCuenta +
                 ", fechaApertura=" + fechaApertura +
                 ", saldo=" + saldo +
                 ", tasaInteres=" + tasaInteres +

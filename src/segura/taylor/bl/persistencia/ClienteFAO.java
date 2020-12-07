@@ -28,9 +28,10 @@ public class ClienteFAO {
      * @see Cliente
      */
     public boolean guardarNuevoCliente(Cliente nuevoCliente) {
-        boolean idRepetido = buscarPorId(nuevoCliente.getId()).isPresent();
+        //boolean idRepetido = buscarPorId(nuevoCliente.getId()).isPresent();
 
-        if(!idRepetido) {
+        //if(!idRepetido) {
+        if (true) {
             ArrayList<String> lines = new ArrayList<>();
             lines.add(nuevoCliente.toCSV());
 

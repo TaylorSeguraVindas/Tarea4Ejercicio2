@@ -30,9 +30,10 @@ public class MovimientoFAO {
      * @see Movimiento
      */
     public boolean guardarNuevoMovimiento(Movimiento nuevoMovimiento) {
-        boolean idRepetido = buscarPorId(nuevoMovimiento.getId()).isPresent();
+        //boolean idRepetido = buscarPorId(nuevoMovimiento.getId()).isPresent();
 
-        if(!idRepetido) {
+        //if(!idRepetido) {
+        if(true) {
             ArrayList<String> lines = new ArrayList<>();
             lines.add(nuevoMovimiento.toCSV());
 

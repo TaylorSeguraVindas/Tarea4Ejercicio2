@@ -4,15 +4,15 @@ import segura.taylor.bl.interfaces.SerializableCSV;
 
 public class Cliente implements SerializableCSV {
     //Variables
-    private String id;
+    private int id;
     private String nombre;
     private String direccion;
 
     //Propiedades
-    public String getId() {
+    public int getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -37,7 +37,7 @@ public class Cliente implements SerializableCSV {
      * @param datos array de String con los datos necesarios para crear la instancia
      */
     public Cliente(String[] datos){
-        this.id = datos[0];
+        this.id = Integer.parseInt(datos[0]);
         this.nombre = datos[1];
         this.direccion = datos[2];
     }
@@ -48,8 +48,18 @@ public class Cliente implements SerializableCSV {
      * @param nombre String que define el nombre
      * @param direccion String que define la direccion
      */
-    public Cliente(String id, String nombre, String direccion) {
+    public Cliente(int id, String nombre, String direccion) {
         this.id = id;
+        this.nombre = nombre;
+        this.direccion = direccion;
+    }
+    /**
+     * Metodo constructor para inicializar sin necesidad de un id
+     * @param nombre String que define el nombre
+     * @param direccion String que define la direccion
+     */
+    public Cliente(String nombre, String direccion) {
+        this.id = 0;
         this.nombre = nombre;
         this.direccion = direccion;
     }

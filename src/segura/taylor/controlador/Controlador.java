@@ -48,7 +48,7 @@ public class Controlador {
      * @return la opcion seleccionada por el usuario
      */
     private int mostrarMenu() {
-        ui.imprimirLinea("Bienvenido, seleccione una opción");
+        ui.imprimirLinea("\n\nBienvenido, seleccione una opción");
         ui.imprimirLinea("1. Registrar cliente");
         ui.imprimirLinea("2. Listar clientes");
         ui.imprimirLinea("3. Registrar cuenta");
@@ -102,14 +102,16 @@ public class Controlador {
      * Metodo usado para registar clientes
      */
     private void registrarCliente() {
-        ui.imprimirLinea("Id: ");
-        String id = ui.leerLinea();
+        ui.imprimirLinea("\n***Registro de cliente***\n");
+
+        //ui.imprimirLinea("Id: ");
+        //int id = ui.leerEntero();
         ui.imprimirLinea("Nombre: ");
         String nombre = ui.leerLinea();
         ui.imprimirLinea("Direccion: ");
         String direccion = ui.leerLinea();
 
-        boolean resultado = gestorClientes.guardarCliente(new Cliente(id, nombre, direccion));
+        boolean resultado = gestorClientes.guardarCliente(new Cliente(nombre, direccion));
 
         if (resultado) {
             ui.imprimirLinea("Cliente registrado correctamente");
@@ -122,6 +124,8 @@ public class Controlador {
      * Metodo usado para listar clientes
      */
     private void listarClientes() {
+        ui.imprimirLinea("\n***Lista de clientes***\n");
+
         List<Cliente> clientes = gestorClientes.listarClientes();
 
         for (Cliente cliente : clientes) {
@@ -133,6 +137,8 @@ public class Controlador {
      * Metodo usado para registrar cuenta
      */
     private void registrarCuenta() {
+        ui.imprimirLinea("\n***Registro de cuenta***\n");
+
         boolean resultado = false;
 
         //Dueño
@@ -142,7 +148,7 @@ public class Controlador {
         do {
             listarClientes();
             ui.imprimir("Id del cliente dueño: ");
-            String idCliente = ui.leerLinea();
+            int idCliente = ui.leerEntero();
 
             clienteEncontrado = gestorClientes.buscarPorId(idCliente);
 
@@ -167,22 +173,35 @@ public class Controlador {
         } while (opcionTipoCuenta < 0 || opcionTipoCuenta > 3);
 
         //Info cuenta
-        ui.imprimir("Numero de cuenta: ");
-        String numeroCuenta = ui.leerLinea();
+        String numeroCuenta = "";
+
+        do {
+            ui.imprimir("Numero de cuenta 7 digitos (xxxxxxx): ");
+            numeroCuenta = ui.leerLinea();
+
+            if (numeroCuenta.length() != 7) {
+                ui.imprimirLinea("\n**La cuenta debe tener un numero de 7 digitos, intentelo nuevamente!**\n");
+            }
+        } while (numeroCuenta.length() != 7);
+
+
+
         LocalDate fechaApertura = LocalDate.now();
 
+        int idCuenta = -1;
         switch (opcionTipoCuenta) {
             case 1:
                 CuentaCorriente cuentaCorriente = new CuentaCorriente(numeroCuenta, fechaApertura, 0.0, duenno);
-                resultado = gestorCuentas.guardarcuenta(cuentaCorriente);
+                idCuenta = gestorCuentas.guardarcuenta(cuentaCorriente);
 
-                if(resultado) {
+                cuentaCorriente.setId(idCuenta);    //Actualizar id para usar el guardado en la BD.
+                if(idCuenta != -1) {
                     registrarMovimiento(cuentaCorriente);
                 }
                 break;
             case 2:
                 CuentaAhorro cuentaAhorro = new CuentaAhorro(numeroCuenta, fechaApertura, 0.0, duenno);
-                resultado = gestorCuentas.guardarcuenta(cuentaAhorro);
+                idCuenta = gestorCuentas.guardarcuenta(cuentaAhorro);
                 break;
             case 3:
                 Optional<Cuenta> cuentaCorrienteEncontrada;
@@ -200,11 +219,11 @@ public class Controlador {
                 double montoDebito = ui.leerDouble();
 
                 CuentaAhorroProgramado cuentaAhorroProgramado = new CuentaAhorroProgramado(numeroCuenta, fechaApertura, 0.0, montoDebito, duenno, cuentaCorrienteObjetivo);
-                resultado = gestorCuentas.guardarcuenta(cuentaAhorroProgramado);
+                idCuenta = gestorCuentas.guardarcuenta(cuentaAhorroProgramado);
                 break;
         }
 
-        if(resultado) {
+        if(idCuenta != -1 && idCuenta != 0) {
             ui.imprimirLinea("Cuenta registrada correctamente");
         } else {
             ui.imprimirLinea("Ocurrió un error al registrar la cuenta");
@@ -215,6 +234,8 @@ public class Controlador {
      * Metodo usado para listar cuentas
      */
     private void listarCuentas() {
+        ui.imprimirLinea("\n***Lista de cuentas***\n");
+
         List<Cuenta> cuentas = gestorCuentas.listarCuentas();
 
         for (Cuenta cuenta : cuentas) {
@@ -226,7 +247,7 @@ public class Controlador {
      * Metodo usado para buscar una cuenta
      */
     private void buscarCuenta() {
-        ui.imprimirLinea("Ingrese el id de la cuenta: ");
+        ui.imprimirLinea("Ingrese el id o numero de la cuenta: ");
         String idCuenta = ui.leerLinea();
 
         Optional<Cuenta> cuentaEncontrada = gestorCuentas.buscarPorId(idCuenta);
@@ -240,6 +261,8 @@ public class Controlador {
      */
     //Normal
     private void registrarMovimiento() {
+
+        ui.imprimirLinea("\n***Registro de movimiento***\n");
         //Cuenta
         Optional<Cuenta> cuentaCorrienteEncontrada;
         do {
@@ -249,9 +272,6 @@ public class Controlador {
             cuentaCorrienteEncontrada = gestorCuentas.buscarPorId(idCuentaCorriente);
         } while (!cuentaCorrienteEncontrada.isPresent());
         Cuenta cuentaModificar = cuentaCorrienteEncontrada.get();
-
-        ui.imprimir("ID movimiento: ");
-        String id = ui.leerLinea();
 
         //Tipo
         int opcionTipo;
@@ -280,13 +300,14 @@ public class Controlador {
         //Info
         ui.imprimir("Monto: ");
         double monto = ui.leerDouble();
+
         ui.imprimir("Descripcion: ");
         String descripcion = ui.leerLinea();
 
         LocalDate fecha = LocalDate.now();
 
         //Realizar movimiento
-        Movimiento nuevoMovimiento = new Movimiento(id, tipo, fecha, descripcion, monto, cuentaModificar);
+        Movimiento nuevoMovimiento = new Movimiento(tipo, fecha, descripcion, monto, cuentaModificar);
 
         if(cuentaModificar.puedeRealizarMovimiento(nuevoMovimiento)) {
             //Modificar datos en la instancia
@@ -307,7 +328,7 @@ public class Controlador {
                 ui.imprimirLinea(e.getMessage());
             }
         } else {
-            ui.imprimirLinea("No se puede realizar el movimiento");
+            ui.imprimirLinea("No se puede realizar el movimiento... la cuenta no lo permite");
         }
     }
 
@@ -317,10 +338,11 @@ public class Controlador {
      */
     //Primer movimiento cuenta corriente
     private void registrarMovimiento(Cuenta cuentaModificar) {
+        ui.imprimirLinea("\n***Registro de movimiento***\n");
+
         ui.imprimirLinea("Deposito inicial. Debe ser 50mil colones.");
+
         //Info
-        ui.imprimir("ID movimiento: ");
-        String id = ui.leerLinea();
         ui.imprimir("Monto: ");
         double monto = ui.leerDouble();
 
@@ -331,7 +353,7 @@ public class Controlador {
         LocalDate fecha = LocalDate.now();
 
         //Realizar movimiento
-        Movimiento nuevoMovimiento = new Movimiento(id, tipo, fecha, descripcion, monto, cuentaModificar);
+        Movimiento nuevoMovimiento = new Movimiento(tipo, fecha, descripcion, monto, cuentaModificar);
 
         if (cuentaModificar.puedeRealizarMovimiento(nuevoMovimiento)) {
             //Modificar datos en la instancia

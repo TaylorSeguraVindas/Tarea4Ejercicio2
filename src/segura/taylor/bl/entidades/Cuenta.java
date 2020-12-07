@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 public abstract class Cuenta implements SerializableCSV {
     //Variables
+    protected int id;
     protected EnumTipoCuenta tipoCuenta;
     protected String numeroCuenta;
     protected LocalDate fechaApertura;
@@ -17,6 +18,13 @@ public abstract class Cuenta implements SerializableCSV {
 
     //Propiedades
     public EnumTipoCuenta getTipoCuenta() { return this.tipoCuenta; }
+
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNumeroCuenta() {
         return numeroCuenta;
@@ -82,7 +90,8 @@ public abstract class Cuenta implements SerializableCSV {
     @Override
     public String toString() {
         return "Cuenta{" +
-                "numeroCuenta=" + numeroCuenta +
+                "id=" + id +
+                ", numeroCuenta=" + numeroCuenta +
                 ", fechaApertura=" + fechaApertura +
                 ", saldo=" + saldo +
                 ", tasaInteres=" + tasaInteres +
