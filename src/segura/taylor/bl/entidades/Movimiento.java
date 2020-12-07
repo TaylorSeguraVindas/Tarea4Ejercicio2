@@ -73,7 +73,6 @@ public class Movimiento implements SerializableCSV {
 
     /**
      * Metodo constructor
-     * @param id int que define el id
      * @param tipo valor de EnumTipoMovimiento que define el tipo de movimiento
      * @param fecha LocalDate que define la fecha de realización
      * @param descripcion String que define la descripcion

@@ -20,11 +20,21 @@ public class MovimientoDAO {
     private CuentaDAO cuentaDAO;
     Connection connection;
 
+    /**
+     * Método constructor
+     * @param connection instancia de Connection que define la conexion con la base de datos
+     */
     public MovimientoDAO(Connection connection) {
         this.connection = connection;
         this.cuentaDAO = new CuentaDAO(connection);
     }
 
+    /**
+     * Método usado para guardar un movimiento en la base de datos
+     * @param nuevoMovimiento instancia que se desea guardar
+     * @return true si el proceso es exitoso, false si ocurre un error
+     * @see Movimiento
+     */
     public boolean save(Movimiento nuevoMovimiento) {
         try {
             Statement query = connection.createStatement();
@@ -43,6 +53,11 @@ public class MovimientoDAO {
         return false;
     }
 
+    /**
+     * Método usado para obtener todas las listas guardadas
+     * @return Lista con todos los movimientos guardados
+     * @throws SQLException si hay un problema con el query
+     */
     public List<Movimiento> findAll() throws SQLException {
         Statement query = connection.createStatement();
         ResultSet result = query.executeQuery("SELECT * FROM tmovimiento");
@@ -63,6 +78,14 @@ public class MovimientoDAO {
         return Collections.unmodifiableList(listaMovimientos);
     }
 
+    /**
+     * Método usado para buscar un movimiento usando como filtro su id
+     * @param id int que define el id del movimiento que se desea encontrar
+     * @return objeto de tipo Optional que contiene una instancia de Movimiento si se encuentra una coincidencia
+     * @throws SQLException si hay un problema con el query
+     * @see Optional
+     * @see Movimiento
+     */
     public Optional<Movimiento> findById(int id) throws SQLException {
         Statement query = connection.createStatement();
         ResultSet result = query.executeQuery("SELECT * FROM tmovimiento WHERE id = " + id);

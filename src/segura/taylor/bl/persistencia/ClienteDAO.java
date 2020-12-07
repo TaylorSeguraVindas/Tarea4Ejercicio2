@@ -21,10 +21,20 @@ import java.util.Optional;
 public class ClienteDAO {
     Connection connection;
 
+    /**
+     * Método constructor
+     * @param connection instancia de Connection que define la conexion con la base de datos
+     */
     public ClienteDAO(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Método usado para guardar un cliente en la base de datos
+     * @param nuevoCliente instancia de la clase Cliente que se desea guardar
+     * @return true si el registro es exitoso, false si ocurre un error
+     * @see Cliente
+     */
     public boolean save(Cliente nuevoCliente) {
         try {
             Statement query = connection.createStatement();
@@ -40,6 +50,13 @@ public class ClienteDAO {
         return false;
     }
 
+    /**
+     * Método usado para obtener todos los clientes guardados
+     * @return lista con todos los clientes guardados
+     * @throws SQLException Si hay un problema con el query
+     * @see List
+     * @see Cliente
+     */
     public List<Cliente> findAll() throws SQLException {
         Statement query = connection.createStatement();
         ResultSet result = query.executeQuery("SELECT * FROM tcliente");
@@ -58,6 +75,14 @@ public class ClienteDAO {
         return Collections.unmodifiableList(listaClientes);
     }
 
+    /**
+     * Método usado para buscar un Cliente en la base de datos usando como filtro su id
+     * @param id int que define el id del cliente que se desea encontrar
+     * @return objeto de tipo Optional que contiene una instancia de Cliente si se encuentra una coincidencia
+     * @throws SQLException Si hay un problema con el query
+     * @see Optional
+     * @see Cliente
+     */
     public Optional<Cliente> findById(int id) throws SQLException {
         Statement query = connection.createStatement();
         ResultSet result = query.executeQuery(("SELECT * FROM tcliente WHERE id = " + id));

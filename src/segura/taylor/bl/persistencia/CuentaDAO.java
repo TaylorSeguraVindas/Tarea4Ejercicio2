@@ -24,11 +24,21 @@ public class CuentaDAO {
 
     private ClienteDAO clienteDAO;
 
+    /**
+     * Método constructor
+     * @param connection instancia de Connection que define la conexion con la base de datos
+     */
     public CuentaDAO(Connection connection) {
         this.connection = connection;
         this.clienteDAO = new ClienteDAO(connection);
     }
 
+    /**
+     * Método usado para guardar una cuenta
+     * @param nuevaCuenta instancia que se desea guardar
+     * @return id de la cuenta guardada, -1 si ocurre un error
+     * @see Cuenta
+     */
     public int save(Cuenta nuevaCuenta) {
         String insert;
 
@@ -69,6 +79,12 @@ public class CuentaDAO {
         return key;
     }
 
+    /**
+     * Método usado para actualizar el saldo de una cuenta guardada
+     * @param cuentaModificada instancia con los datos actualizados que se desea guardar
+     * @return true si el proceso es exitoso, false si ocurre un error
+     * @see Cuenta
+     */
     public boolean updateSaldo(Cuenta cuentaModificada) {
         try {
             Statement query = connection.createStatement();
@@ -82,6 +98,14 @@ public class CuentaDAO {
         }
         return false;
     }
+
+    /**
+     * Método usado para obtener todas las cuentas guardadas
+     * @return lista con todas las cuentas guardadas
+     * @throws SQLException Si hay un problema con el query
+     * @see List
+     * @see Cuenta
+     */
     public List<Cuenta> findAll() throws SQLException {
         Statement query = connection.createStatement();
         ResultSet result = query.executeQuery("SELECT * FROM tcuenta");
@@ -132,6 +156,12 @@ public class CuentaDAO {
         return Collections.unmodifiableList(listaCuentas);
     }
 
+    /**
+     * Método usado para buscar una cuenta usando como filtro su id
+     * @param id String que define el id o el numero de cuenta de la cuenta que se desea encontrar
+     * @return objeto de tipo Optional que contiene una instancia de Cuenta si se encuentra una coincidencia
+     * @throws SQLException Si hay un problema con el query
+     */
     public Optional<Cuenta> findById(String id) throws SQLException {
         Statement query = connection.createStatement();
         ResultSet result = query.executeQuery("SELECT * FROM tcuenta WHERE id = " + id + " OR numeroCuenta = '" + id + "'");
